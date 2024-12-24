@@ -81,7 +81,7 @@ export default function App() {
               isLoading={isLoading2}
               type="button"
               variant="flat"
-              onClick={() => {
+              onPress={() => {
                 setIsLoading2(true);
                 router.push(currentLink);
               }}
@@ -100,8 +100,7 @@ export default function App() {
               className="w-1/2"
               color={_18holes ? "default" : "success"}
               variant="flat"
-              onClick={() => set18holes(false)}
-              onFocus={() => set18holes(false)}
+              onPress={() => set18holes(false)}
             >
               9
             </Button>
@@ -109,8 +108,7 @@ export default function App() {
               className="w-1/2"
               color={_18holes ? "success" : "default"}
               variant="flat"
-              onClick={() => set18holes(true)}
-              onFocus={() => set18holes(true)}
+              onPress={() => set18holes(true)}
             >
               18
             </Button>

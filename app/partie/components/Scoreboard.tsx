@@ -80,14 +80,14 @@ function ScoreCell({
             <Button
               className="text-lg"
               size="sm"
-              onClick={() => value !== MIN_VALUE && modifyScore(false)}
+              onPress={() => value !== MIN_VALUE && modifyScore(false)}
             >
               -
             </Button>
             <Button
               className="text-lg"
               size="sm"
-              onClick={() => value !== MAX_VALUE && modifyScore(true)}
+              onPress={() => value !== MAX_VALUE && modifyScore(true)}
             >
               +
             </Button>
@@ -125,7 +125,7 @@ function ParCell({
                 key={newPar}
                 className="text-lg"
                 size="sm"
-                onClick={() => {
+                onPress={() => {
                   updatePar(rowIndex, newPar);
                   setIsOpen(false);
                 }}
