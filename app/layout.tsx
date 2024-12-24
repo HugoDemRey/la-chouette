@@ -48,7 +48,7 @@ export default function RootLayout({
               {children}
             </main>
             <footer className="w-full flex items-center justify-between py-4 px-6">
-              <span className="text-sm">Version 0.1</span>
+              <span className="text-sm">Version 1.0</span>
               <Link
                 className="text-sm text-blue-400 hover:underline"
                 href="/regles-du-jeu"

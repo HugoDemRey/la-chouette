@@ -1,3 +1,5 @@
+"use client";
+
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 import { Button, ButtonGroup } from "@nextui-org/button";
 import React, { useEffect, useState } from "react";
@@ -13,6 +15,7 @@ interface ScoreCellProps {
   isActive: boolean;
   rowIndex: number;
   playerIndex: number;
+  tick: number;
   updateScore: (row: number, player: number, score: number) => void;
 }
 
@@ -20,14 +23,12 @@ interface ParCellProps {
   par: number;
   rowIndex: number;
   updatePar: (row: number, par: number) => void;
-  nbPlayers: number;
-  scores: number[][];
 }
 
 const MAX_VALUE = 10;
 const MIN_VALUE = 1;
 
-function formatScore(value: number, defaultValue: number) {
+function formatScore(value: number) {
   if (value === -1) {
     return "-";
   }
@@ -49,6 +50,7 @@ function ScoreCell({
   isActive,
   rowIndex,
   playerIndex,
+  tick,
   updateScore,
 }: ScoreCellProps) {
   const [init, setInit] = useState(true);
@@ -71,7 +73,10 @@ function ScoreCell({
     <Popover placement="top">
       <PopoverTrigger className="w-3 min-w-0 rounded-md">
         <Button isDisabled={!isActive} style={{ fontStyle: "monospace" }}>
-          {formatScore(value, defaultValue)}
+          <span className="absolute top-0 right-1 text-xs">
+            {tick === -1 ? "-" : tick}
+          </span>
+          {formatScore(value)}
         </Button>
       </PopoverTrigger>
       <PopoverContent>
@@ -98,13 +103,7 @@ function ScoreCell({
   );
 }
 
-function ParCell({
-  par,
-  rowIndex,
-  updatePar,
-  nbPlayers,
-  scores,
-}: ParCellProps) {
+function ParCell({ par, rowIndex, updatePar }: ParCellProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -145,40 +144,34 @@ function RowContent(
   players: string[],
   scores: number[][],
   updateScore: (row: number, player: number, score: number) => void,
+  ticks: number[],
   par: number,
   updatePar: (row: number, par: number) => void,
 ) {
   const areScoresActive = par !== -1;
 
   return (
-    <div key={rowIndex} className="flex flex-row items-center">
-      <div className="w-16 px-2 py-1 text-center">{rowIndex + 1}</div>
-      <div className="w-12 px-2 py-1 text-center">
-        <ParCell
-          nbPlayers={players.length}
-          par={par}
-          rowIndex={rowIndex}
-          scores={scores}
-          updatePar={updatePar}
-        />
+    <div
+      key={rowIndex}
+      className={`flex flex-row items-center ${rowIndex % 2 === 1 ? "bg-default-50" : ""} rounded-md`}
+    >
+      <div className="w-16 px-2 py-1 text-center text-sm">{rowIndex + 1}</div>
+      <div className="w-14 px-2 py-1 text-center">
+        <ParCell par={par} rowIndex={rowIndex} updatePar={updatePar} />
       </div>
       {players.map((_, playerIndex) => (
-        <div key={playerIndex} className="flex-1 px-2 py-1 text-center">
+        <div key={playerIndex} className="w-14 flex-1 px-2 py-1 text-center">
           <ScoreCell
             defaultValue={par}
             isActive={areScoresActive}
             playerIndex={playerIndex}
             rowIndex={rowIndex}
+            tick={ticks[playerIndex]}
             updateScore={updateScore}
             value={scores[rowIndex][playerIndex]}
           />
         </div>
       ))}
-      <div className="w-16 px-2 py-1 text-center">
-        {scores[rowIndex].some((score) => score < 0)
-          ? "-"
-          : scores[rowIndex].reduce((a, b) => a + b, 0)}
-      </div>
     </div>
   );
 }
@@ -212,6 +205,11 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
   const [scores, setScores] = useState<number[][]>(initialScores);
   const [pars, setPars] = useState<number[]>(initialPars);
 
+  // the ticks are placed on top of each scorecell to indicate the points of the "La Chouette" game
+  const [ticks, setTicks] = useState<number[][]>(
+    Array.from({ length: nbRows }, () => Array(players.length).fill(-1)),
+  );
+
   // Save scores and pars to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("scores", JSON.stringify(scores));
@@ -219,10 +217,189 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
   }, [scores, pars]);
 
   useEffect(() => {
+    updateTicks();
+  }, [scores]);
+
+  useEffect(() => {
     const currentLink = window.location.href;
 
     localStorage.setItem("currentLink", currentLink);
   }, []);
+
+  function updateRowTicksFor3Players(
+    row: number,
+    updated: number[][],
+    prev: number[][],
+  ) {
+    updated[row] = [...prev[row]];
+
+    const s: number[] = [scores[row][0], scores[row][1], scores[row][2]];
+
+    const isOneNegative = s.some((score) => score < 0);
+
+    if (isOneNegative) return;
+
+    const areThreeEqual: boolean = s.every((score) => score === s[0]);
+
+    if (areThreeEqual) {
+      updated[row][0] = 2;
+      updated[row][1] = 2;
+      updated[row][2] = 2;
+
+      return;
+    }
+
+    const bestIndex: number = s.indexOf(Math.min(...s));
+    const worstIndex: number = s.indexOf(Math.max(...s));
+    const middleIndex: number = [0, 1, 2].filter(
+      (index) => index !== bestIndex && index !== worstIndex,
+    )[0];
+
+    const twoBestEqual: boolean = s[bestIndex] === s[middleIndex];
+
+    if (twoBestEqual) {
+      updated[row][bestIndex] = 3;
+      updated[row][middleIndex] = 3;
+      updated[row][worstIndex] = 0;
+
+      return;
+    }
+
+    const twoWorstEqual: boolean = s[worstIndex] === s[middleIndex];
+
+    if (twoWorstEqual) {
+      updated[row][bestIndex] = 4;
+      updated[row][middleIndex] = 1;
+      updated[row][worstIndex] = 1;
+
+      return;
+    }
+
+    updated[row][bestIndex] = 4;
+    updated[row][middleIndex] = 2;
+    updated[row][worstIndex] = 0;
+  }
+
+  function updateRowTicksFor4Players(
+    row: number,
+    updated: number[][],
+    prev: number[][],
+  ) {
+    updated[row] = [...prev[row]];
+
+    const s: number[] = [
+      scores[row][0],
+      scores[row][1],
+      scores[row][2],
+      scores[row][3],
+    ];
+
+    const isOneNegative = s.some((score) => score < 0);
+
+    if (isOneNegative) return;
+
+    const areFourEqual: boolean = s.every((score) => score === s[0]);
+
+    if (areFourEqual) {
+      updated[row][0] = 3;
+      updated[row][1] = 3;
+      updated[row][2] = 3;
+      updated[row][3] = 3;
+
+      return;
+    }
+
+    const bestIndex: number = s.indexOf(Math.min(...s));
+    const worstIndex: number = s.indexOf(Math.max(...s));
+    const middleIndices: number[] = [0, 1, 2, 3]
+      .filter((index) => index !== bestIndex && index !== worstIndex)
+      .sort((a, b) => s[a] - s[b]);
+
+    // middleIndices[0] >= middleIndices[1]
+    const twoBestEqual: boolean = s[bestIndex] === s[middleIndices[0]];
+    const twoWorstEqual: boolean = s[worstIndex] === s[middleIndices[1]];
+
+    if (twoBestEqual) {
+      if (twoWorstEqual) {
+        updated[row][bestIndex] = 4;
+        updated[row][middleIndices[0]] = 4;
+        updated[row][middleIndices[1]] = 2;
+        updated[row][worstIndex] = 2;
+
+        return;
+      }
+
+      const threeBestEqual =
+        updated[row][middleIndices[0]] === updated[row][middleIndices[1]];
+
+      if (threeBestEqual) {
+        updated[row][bestIndex] = 4;
+        updated[row][middleIndices[0]] = 4;
+        updated[row][middleIndices[1]] = 4;
+        updated[row][worstIndex] = 0;
+
+        return;
+      }
+    }
+
+    if (twoWorstEqual) {
+      const threeWorstEqual = s[middleIndices[0]] === s[middleIndices[1]];
+
+      if (threeWorstEqual) {
+        updated[row][bestIndex] = 6;
+        updated[row][middleIndices[0]] = 2;
+        updated[row][middleIndices[1]] = 2;
+        updated[row][worstIndex] = 2;
+
+        return;
+      }
+
+      updated[row][bestIndex] = 6;
+      updated[row][middleIndices[0]] = 4;
+      updated[row][middleIndices[1]] = 1;
+      updated[row][worstIndex] = 1;
+
+      return;
+    }
+
+    const twoMiddleEqual = s[middleIndices[0]] === s[middleIndices[1]];
+
+    if (twoMiddleEqual) {
+      updated[row][bestIndex] = 6;
+      updated[row][middleIndices[0]] = 3;
+      updated[row][middleIndices[1]] = 3;
+      updated[row][worstIndex] = 0;
+
+      return;
+    }
+
+    updated[row][bestIndex] = 6;
+    updated[row][middleIndices[0]] = 3;
+    updated[row][middleIndices[1]] = 2;
+    updated[row][worstIndex] = 1;
+  }
+
+  function updateRowTicks(
+    nbPlayers: number,
+    updated: number[][],
+    prev: number[][],
+  ) {
+    const fn: (row: number, updated: number[][], prev: number[][]) => void =
+      nbPlayers === 3 ? updateRowTicksFor3Players : updateRowTicksFor4Players;
+
+    for (let i = 0; i < nbRows; i++) fn(i, updated, prev);
+  }
+
+  function updateTicks() {
+    setTicks((prev) => {
+      // Hard copy of the previous ticks
+      const updated = prev.map((row) => [...row]);
+
+      updateRowTicks(players.length, updated, prev);
+
+      return updated;
+    });
+  }
 
   const setScore = (row: number, player: number, score: number) => {
     setScores((prev) => {
@@ -245,6 +422,18 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
     });
   };
 
+  function computeTicks(player: number) {
+    let total = 0;
+
+    for (let i = nbRows - 1; i >= 0; i--) {
+      if (ticks[i][player] == -1) continue;
+
+      total += ticks[i][player];
+    }
+
+    return total;
+  }
+
   function computeScore(player: number) {
     let total = 0;
 
@@ -258,56 +447,52 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
   }
 
   function formatScore(score: number) {
-    if (score > 0) {
-      return `+${score}`;
-    }
-
-    return score;
+    return score >= 0 ? `+${score}` : score.toString();
   }
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row bg-default rounded-md mb-1 font-bold">
+      <div className="flex flex-row border-b-2 border-default mb-1 font-semibold">
         <div className="w-16 px-2 py-1 text-center">Trou</div>
-        <div className="w-12 px-2 py-1 text-center">Par</div>
+        <div className="w-14 px-2 py-1 text-center">Par</div>
         {players.map((player, index) => (
           <div key={index} className="flex-1 px-2 py-1 text-center">
             {`${player.charAt(0)}.`}
           </div>
         ))}
-        <div className="w-16 px-2 py-1 text-center">Score</div>
       </div>
 
-      <div className="flex flex-col">
+      <div className={"flex flex-col"}>
         {Array.from({ length: nbRows }, (_, rowIndex) =>
           RowContent(
             rowIndex,
             players,
             scores,
             setScore,
+            ticks[rowIndex],
             pars[rowIndex],
             updatePar,
           ),
         )}
       </div>
-      <div className="flex flex-row bg-default rounded-md mt-1 font-bold">
+      <div
+        className={`flex flex-row border-t-2 border-default mt-1`}
+      >
         <div className="w-16 px-2 py-1 text-center" />
-        <div
-          className="w-12 px-2 py-1 text-center text-md"
-          style={{ fontFamily: "monospace" }}
-        >
+        <div className="w-14 px-2 py-1 text-center text-md text-primary">
           {pars.reduce((a, b) => (b !== -1 ? a + b : a), 0)}
         </div>
         {players.map((player, index) => (
           <div
             key={index}
-            className="flex-1 px-2 py-1 text-center text-md"
-            style={{ fontFamily: "monospace" }}
+            className="w-14 flex-1 px-2 py-1 text-center relative"
           >
-            {formatScore(computeScore(index))}
+            <span className="absolute top-0 right-2 text-sm">
+              {computeTicks(index)}
+            </span>
+            <span className="text-md">{formatScore(computeScore(index))}</span>
           </div>
         ))}
-        <div className="w-16 px-2 py-1 text-center" />
       </div>
     </div>
   );
