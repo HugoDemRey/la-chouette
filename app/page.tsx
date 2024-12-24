@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Input } from "@nextui-org/input";
-import { Button, ButtonGroup } from "@nextui-org/button";
-import { Form } from "@nextui-org/form";
+import { Input } from "@nextui-org/react";
+import { Button, ButtonGroup } from "@nextui-org/react";
+import { Form } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
 export default function App() {
@@ -58,7 +58,7 @@ export default function App() {
       );
     }
 
-    if (index === inputs.length - 1 && value) {
+    if (index === inputs.length - 1 && index < 3 && value) {
       setInputs([...inputs, { name: "" }]);
     }
   };
@@ -114,18 +114,20 @@ export default function App() {
             </Button>
           </ButtonGroup>
         </div>
+        <label className="text-sm" htmlFor="Joueurs">
+          Joueurs (3-4)
+        </label>
 
         {inputs.map((input, index) => (
           <Input
             key={index}
-            label={
-              index === inputs.length - 1
-                ? `Joueur ${index + 1} (nouveau)`
-                : `Joueur ${index + 1}`
-            }
             labelPlacement="outside"
             name={`joueur${index + 1}`}
-            placeholder="+ Ajouter un joueur"
+            placeholder={
+              index < 3
+                ? "+ Ajouter un joueur"
+                : "+ Ajouter un joueur (optionnel)"
+            }
             value={input.name}
             onChange={(e) => handleInputChange(index, e.target.value)}
           />
@@ -133,8 +135,8 @@ export default function App() {
 
         <Button
           fullWidth
-          color={inputs.length == 1 ? "default" : "success"}
-          isDisabled={inputs.length == 1}
+          color={inputs.length < 4 ? "default" : "success"}
+          isDisabled={inputs.length < 4}
           isLoading={isLoading}
           type="submit"
           variant="flat"

@@ -293,7 +293,7 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
       <div className="flex flex-row bg-default rounded-md mt-1 font-bold">
         <div className="w-16 px-2 py-1 text-center" />
         <div
-          className="w-12 px-2 py-1 text-center text-lg"
+          className="w-12 px-2 py-1 text-center text-md"
           style={{ fontFamily: "monospace" }}
         >
           {pars.reduce((a, b) => (b !== -1 ? a + b : a), 0)}
@@ -301,7 +301,7 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
         {players.map((player, index) => (
           <div
             key={index}
-            className="flex-1 px-2 py-1 text-center text-lg"
+            className="flex-1 px-2 py-1 text-center text-md"
             style={{ fontFamily: "monospace" }}
           >
             {formatScore(computeScore(index))}
