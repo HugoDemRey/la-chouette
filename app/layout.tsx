@@ -10,12 +10,19 @@ import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
+
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "La Chouette",
+  },
   icons: {
+    apple: "/icon_512x512.png",
     icon: "/favicon.ico",
   },
 };
