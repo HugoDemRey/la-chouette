@@ -74,9 +74,9 @@ function ScoreCell({
       <PopoverTrigger className="w-3 min-w-0 rounded-md">
         <Button isDisabled={!isActive} style={{ fontStyle: "monospace" }}>
           <span className="absolute top-0 right-1 text-xs">
-            {tick === -1 ? "-" : tick}
+            {formatScore(value)}
           </span>
-          {formatScore(value)}
+          {tick === -1 ? "-" : tick}
         </Button>
       </PopoverTrigger>
       <PopoverContent>
@@ -210,6 +210,10 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
     Array.from({ length: nbRows }, () => Array(players.length).fill(-1)),
   );
 
+  const [ticksSum, setTicksSum] = useState<number[]>(
+    Array(players.length).fill(0),
+  );
+
   // Save scores and pars to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("scores", JSON.stringify(scores));
@@ -219,6 +223,10 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
   useEffect(() => {
     updateTicks();
   }, [scores]);
+
+  useEffect(() => {
+    updateTicksSum();
+  }, [ticks]);
 
   useEffect(() => {
     const currentLink = window.location.href;
@@ -401,6 +409,27 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
     });
   }
 
+  function updateTicksSum() {
+    setTicksSum((prev) => {
+      const updated = Array(players.length).fill(0);
+
+      for (let i = 0; i < players.length; i++) {
+        for (let j = 0; j < nbRows; j++) {
+          if (ticks[j][i] !== -1) {
+            updated[i] += ticks[j][i];
+          }
+        }
+      }
+
+      const minValue = Math.min(...updated);
+
+      for (let i = 0; i < updated.length; i++) {
+        updated[i] -= minValue;
+      }
+      return updated;
+    });
+  }
+
   const setScore = (row: number, player: number, score: number) => {
     setScores((prev) => {
       const updated = [...prev];
@@ -422,33 +451,6 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
     });
   };
 
-  function computeTicks(player: number) {
-    let total = 0;
-
-    for (let i = nbRows - 1; i >= 0; i--) {
-      if (ticks[i][player] == -1) continue;
-
-      total += ticks[i][player];
-    }
-
-    return total;
-  }
-
-  function computeScore(player: number) {
-    let total = 0;
-
-    for (let i = nbRows - 1; i >= 0; i--) {
-      if (scores[i][player] == -1) continue;
-
-      total += scores[i][player] - pars[i];
-    }
-
-    return total;
-  }
-
-  function formatScore(score: number) {
-    return score >= 0 ? `+${score}` : score.toString();
-  }
 
   return (
     <div className="flex flex-col">
@@ -475,22 +477,17 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
           ),
         )}
       </div>
-      <div
-        className={`flex flex-row border-t-2 border-default mt-1`}
-      >
+      <div className={`flex flex-row border-t-2 border-default mt-1`}>
         <div className="w-16 px-2 py-1 text-center" />
         <div className="w-14 px-2 py-1 text-center text-md text-primary">
-          {pars.reduce((a, b) => (b !== -1 ? a + b : a), 0)}
+          {/* {pars.reduce((a, b) => (b !== -1 ? a + b : a), 0)} */}
         </div>
         {players.map((player, index) => (
           <div
             key={index}
             className="w-14 flex-1 px-2 py-1 text-center relative"
           >
-            <span className="absolute top-0 right-2 text-sm">
-              {computeTicks(index)}
-            </span>
-            <span className="text-md">{formatScore(computeScore(index))}</span>
+            <span className="text-md">{ticksSum[index]}</span>
           </div>
         ))}
       </div>
