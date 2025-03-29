@@ -453,7 +453,7 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
 
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <div className="flex flex-row border-b-2 border-default mb-1 font-semibold">
         <div className="w-16 px-2 py-1 text-center">Trou</div>
         <div className="w-14 px-2 py-1 text-center">Par</div>

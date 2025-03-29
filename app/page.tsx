@@ -121,8 +121,10 @@ export default function App() {
         {inputs.map((input, index) => (
           <Input
             key={index}
+            className="text-base"
             labelPlacement="outside"
             name={`joueur${index + 1}`}
+            size="md"
             placeholder={
               index < 3
                 ? "+ Ajouter un joueur"
