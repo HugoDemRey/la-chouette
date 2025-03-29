@@ -51,12 +51,12 @@ export default function RootLayout({
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen px-0">
             <Navbar />
-            <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+            <main className="container mx-auto max-w-7xl pt-8 px-6 flex-grow">
               {children}
             </main>
             <footer className="w-full flex items-center justify-center pb-6 px-0">
               <div className="w-full flex items-center justify-between max-w-3xl px-6">
-                <span className="text-sm">Version 1.1</span>
+                <span className="text-sm">Version 1.2</span>
                 <Link
                   className="text-sm text-blue-400 hover:underline"
                   href="/regles-du-jeu"

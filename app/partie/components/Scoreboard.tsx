@@ -28,6 +28,21 @@ interface ParCellProps {
 const MAX_VALUE = 10;
 const MIN_VALUE = 1;
 
+const TableDimensions = {
+  ThreePlayers: {
+    HOLE_WIDTH: "w-16",
+    PAR_WIDTH: "w-20",
+    SCORE_WIDTH: "w-16",
+  },
+  FourPlayers: {
+    HOLE_WIDTH: "w-16",
+    PAR_WIDTH: "w-14",
+    SCORE_WIDTH: "w-14",
+  },
+};
+
+
+
 function formatScore(value: number) {
   if (value === -1) {
     return "-";
@@ -155,12 +170,14 @@ function RowContent(
       key={rowIndex}
       className={`flex flex-row items-center ${rowIndex % 2 === 1 ? "bg-default-50" : ""} rounded-md`}
     >
-      <div className="w-16 px-2 py-1 text-center text-sm">{rowIndex + 1}</div>
-      <div className="w-14 px-2 py-1 text-center">
+      <div className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].HOLE_WIDTH} px-2 py-1 text-center text-sm`}>
+        {rowIndex + 1}
+      </div>
+      <div className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].PAR_WIDTH} w-14 px-2 py-1 text-center`}>
         <ParCell par={par} rowIndex={rowIndex} updatePar={updatePar} />
       </div>
       {players.map((_, playerIndex) => (
-        <div key={playerIndex} className="w-14 flex-1 px-2 py-1 text-center">
+        <div key={playerIndex} className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].SCORE_WIDTH} w-14 flex-1 px-2 py-1 text-center`}>
           <ScoreCell
             defaultValue={par}
             isActive={areScoresActive}
@@ -453,12 +470,12 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
 
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col">
       <div className="flex flex-row border-b-2 border-default mb-1 font-semibold">
-        <div className="w-16 px-2 py-1 text-center">Trou</div>
-        <div className="w-14 px-2 py-1 text-center">Par</div>
+        <div className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].HOLE_WIDTH} px-2 py-1 text-center`}>Trou</div>
+        <div className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].PAR_WIDTH} w-14 px-2 py-1 text-center`}>Par</div>
         {players.map((player, index) => (
-          <div key={index} className="flex-1 px-2 py-1 text-center">
+          <div key={index} className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].SCORE_WIDTH} flex-1 px-2 py-1 text-center`}>
             {`${player.charAt(0)}.`}
           </div>
         ))}
@@ -478,14 +495,14 @@ export default function Scoreboard({ players, is18Holes }: ScoreboardProps) {
         )}
       </div>
       <div className={`flex flex-row border-t-2 border-default mt-1`}>
-        <div className="w-16 px-2 py-1 text-center" />
-        <div className="w-14 px-2 py-1 text-center text-md text-primary">
+        <div className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].HOLE_WIDTH} px-2 py-1 text-center`} />
+        <div className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].PAR_WIDTH} px-2 py-1 text-center text-md text-primary`}>
           {/* {pars.reduce((a, b) => (b !== -1 ? a + b : a), 0)} */}
         </div>
         {players.map((player, index) => (
           <div
             key={index}
-            className="w-14 flex-1 px-2 py-1 text-center relative"
+            className={`${TableDimensions[players.length === 3 ? "ThreePlayers" : "FourPlayers"].SCORE_WIDTH} flex-1 px-2 py-1 text-center relative`}
           >
             <span className="text-md">{ticksSum[index]}</span>
           </div>
