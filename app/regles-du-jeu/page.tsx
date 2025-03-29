@@ -5,9 +5,9 @@ export default function GolfRules() {
   return (
     <div className="flex justify-center items-center min-h-screen pb-8">
       <Card className="w-full max-w-3xl shadow-lg rounded-lg">
-        <CardHeader className="bg-blue-600 text-white rounded-t-lg py-4 px-6">
+        <CardHeader className="bg-blue-100 text-blue-500 dark:bg-blue-900 dark:text-blue-100 rounded-t-lg py-4 px-6">
           <h2 className="text-lg font-bold">
-            Règles du jeu de golf &quot;La Chouette&quot;
+            Règles de La Chouette
           </h2>
         </CardHeader>
         <CardBody className="p-6 space-y-6">
