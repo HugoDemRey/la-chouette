@@ -87,25 +87,27 @@ function ScoreCell({
   return (
     <Popover placement="top">
       <PopoverTrigger className="w-3 min-w-0 rounded-md">
-        <Button isDisabled={!isActive} style={{ fontStyle: "monospace" }}>
-          <span className="absolute top-0 right-1 text-xs">
+        <Button isDisabled={!isActive} style={{ fontStyle: "monospace", paddingInline: "1.5rem" }}>
+          <span className="absolute top-0 right-1 text-l font-bold">
             {formatScore(value)}
           </span>
-          {tick === -1 ? "-" : tick}
+          <span className="absolute left-3 text-xl font-bold">{tick === -1 ? "-" : tick}</span>
+          
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         <div className="px-1 py-2">
           <ButtonGroup>
             <Button
-              className="text-lg"
+              className="text-xl"
               size="sm"
               onPress={() => value !== MIN_VALUE && modifyScore(false)}
             >
               -
             </Button>
+            <span className="px-2 text-xl">{formatScore(value)}</span>
             <Button
-              className="text-lg"
+              className="text-xl"
               size="sm"
               onPress={() => value !== MAX_VALUE && modifyScore(true)}
             >
@@ -125,7 +127,7 @@ function ParCell({ par, rowIndex, updatePar }: ParCellProps) {
     <Popover isOpen={isOpen} placement="top" onOpenChange={setIsOpen}>
       <PopoverTrigger>
         <Button
-          className="bg-primary w-3 min-w-0 rounded-md text-white"
+          className="bg-primary w-3 min-w-0 rounded-md text-white text-xl font-bold px-5"
           style={{ fontStyle: "monospace" }}
         >
           {par === -1 ? "-" : par}
@@ -137,7 +139,7 @@ function ParCell({ par, rowIndex, updatePar }: ParCellProps) {
             {[3, 4, 5].map((newPar) => (
               <Button
                 key={newPar}
-                className="text-lg"
+                className="text-l"
                 size="sm"
                 onPress={() => {
                   updatePar(rowIndex, newPar);
