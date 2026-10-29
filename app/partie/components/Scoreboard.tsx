@@ -1,7 +1,12 @@
 "use client";
 
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
-import { Button, ButtonGroup } from "@nextui-org/button";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Button,
+  ButtonGroup,
+} from "@heroui/react";
 import React, { useEffect, useState } from "react";
 
 interface ScoreboardProps {

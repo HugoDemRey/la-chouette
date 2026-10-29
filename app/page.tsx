@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Input } from "@nextui-org/react";
-import { Button, ButtonGroup } from "@nextui-org/react";
-import { Form } from "@nextui-org/react";
+import { Input, Button, ButtonGroup, Form } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
 export default function App() {

@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Card, CardHeader, CardBody } from "@heroui/react";
 
 export default function GolfRules() {
   return (
