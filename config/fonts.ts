@@ -1,11 +1,19 @@
-import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google";
+import { Bricolage_Grotesque, Figtree, Young_Serif } from "next/font/google";
 
-export const fontSans = FontSans({
+export const fontSans = Figtree({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-figtree",
 });
 
-export const fontMono = FontMono({
+/** Display face of the light theme. */
+export const fontSerif = Young_Serif({
   subsets: ["latin"],
-  variable: "--font-mono",
+  weight: "400",
+  variable: "--font-young-serif",
+});
+
+/** Display face of the dark theme. */
+export const fontGrotesque = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
 });

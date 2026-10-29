@@ -1,53 +1,29 @@
-# Next.js & NextUI Template
+# La Chouette
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+Feuille de score mobile pour La Chouette, un jeu de golf à 3 ou 4 joueurs où
+les points de chaque trou se partagent selon le classement des coups.
 
-[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
+- Application web installable (PWA), utilisable hors ligne sur le parcours.
+- Thème clair « Club-house » et thème sombre « Nocturne », selon le réglage du téléphone.
+- La partie est enregistrée sur le téléphone (local storage).
 
-## Technologies Used
-
-- [Next.js 14](https://nextjs.org/docs/getting-started)
-- [NextUI v2](https://nextui.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
-
-## How to Use
-
-### Use the template with create-next-app
-
-To create a new project based on this template using `create-next-app`, run the following command:
-
-```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
-```
-
-### Install dependencies
-
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
+## Développement
 
 ```bash
 npm install
-```
-
-### Run the development server
-
-```bash
 npm run dev
 ```
 
-### Setup pnpm (optional)
+`npm run build && npm start` pour tester la version installable : le service
+worker (`public/sw.js`) n'est enregistré qu'en production.
 
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
+## Organisation
 
-```bash
-public-hoist-pattern[]=*@nextui-org/*
-```
+- `lib/scoring.ts` : règle de calcul des points (partagée avec la page des règles).
+- `lib/game.ts`, `lib/use-game.ts` : partie enregistrée et état partagé.
+- `app/partie` : écrans « Trou » et « Carte ».
+- Icônes : `app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png`, `public/icons/`.
 
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+## Stack
 
-## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
+Next.js, React, Tailwind CSS v4, TypeScript.

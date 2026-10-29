@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { AppHeader } from "@/components/app-header";
+
 export default function Error({
   error,
   reset,
@@ -10,22 +12,26 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
     /* eslint-disable no-console */
     console.error(error);
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
-    </div>
+    <>
+      <AppHeader title="Oups" />
+      <main className="gutter mx-auto flex max-w-md flex-col gap-4 py-8">
+        <p className="text-muted">
+          Une erreur inattendue est survenue. Votre partie est enregistrée sur
+          ce téléphone : réessayez pour la retrouver.
+        </p>
+        <button
+          className="bg-primary text-primary-ink rounded-card h-12 font-bold"
+          type="button"
+          onClick={() => reset()}
+        >
+          Réessayer
+        </button>
+      </main>
+    </>
   );
 }
