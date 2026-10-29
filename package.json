@@ -1,14 +1,29 @@
 {
 	"name": "la-chouette",
 	"version": "2.0.0",
+	"description": "Mobile scorecard (PWA) for La Chouette, a golf game for 3 or 4 players",
 	"private": true,
+	"license": "MIT",
+	"author": "Hugo Demule",
+	"homepage": "https://github.com/HugoDemRey/la-chouette#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HugoDemRey/la-chouette.git"
+	},
+	"bugs": {
+		"url": "https://github.com/HugoDemRey/la-chouette/issues"
+	},
 	"type": "module",
+	"engines": {
+		"node": ">=20.9.0"
+	},
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint . --fix",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"lint:check": "eslint ."
 	},
 	"dependencies": {
 		"clsx": "2.1.1",

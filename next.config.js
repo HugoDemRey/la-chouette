@@ -1,5 +1,15 @@
+import { readFileSync } from "node:fs";
+
+// package.json is the single source of the app version (see CHANGELOG.md).
+const { version } = JSON.parse(
+  readFileSync(new URL("./package.json", import.meta.url), "utf8"),
+);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_APP_VERSION: version,
+  },
   async headers() {
     return [
       {
