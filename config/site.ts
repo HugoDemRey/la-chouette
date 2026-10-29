@@ -2,68 +2,12 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "La Chouette",
-  description: "Un jeu de golf à plusieurs",
-  navItems: [
-    // {
-    //   label: "Home",
-    //   href: "/",
-    // },
-    // {
-    //   label: "Docs",
-    //   href: "/docs",
-    // },
-    // {
-    //   label: "Pricing",
-    //   href: "/pricing",
-    // },
-    // {
-    //   label: "Blog",
-    //   href: "/blog",
-    // },
-    // {
-    //   label: "About",
-    //   href: "/about",
-    // },
-  ],
-  navMenuItems: [
-    // {
-    //   label: "Profile",
-    //   href: "/profile",
-    // },
-    // {
-    //   label: "Dashboard",
-    //   href: "/dashboard",
-    // },
-    // {
-    //   label: "Projects",
-    //   href: "/projects",
-    // },
-    // {
-    //   label: "Team",
-    //   href: "/team",
-    // },
-    // {
-    //   label: "Calendar",
-    //   href: "/calendar",
-    // },
-    // {
-    //   label: "Settings",
-    //   href: "/settings",
-    // },
-    // {
-    //   label: "Help & Feedback",
-    //   href: "/help-feedback",
-    // },
-    // {
-    //   label: "Logout",
-    //   href: "/logout",
-    // },
-  ],
-  links: {
-    // github: "https://github.com/nextui-org/nextui",
-    // twitter: "https://twitter.com/getnextui",
-    // docs: "https://nextui.org",
-    // discord: "https://discord.gg/9b6yyZKmH4",
-    // sponsor: "https://patreon.com/jrgarciadev",
+  description: "Le jeu de golf à 3 ou 4 joueurs",
+  /** From package.json, injected at build time by next.config.js. */
+  version: process.env.NEXT_PUBLIC_APP_VERSION ?? "dev",
+  /** Header color of each theme, used for the phone's status bar. */
+  themeColors: {
+    light: "#123d30",
+    dark: "#0c1322",
   },
 };

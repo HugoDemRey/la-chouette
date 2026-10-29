@@ -1,3 +1,196 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/*
+ * Two moods, picked by the phone's own setting:
+ * light = "Club-house" (fairway green, scorecard paper, brass),
+ * dark = "Nocturne" (midnight navy, owl-eye amber).
+ */
+:root {
+  --bg: #eef1e8;
+  --surface: #fbfcf8;
+  --ink: #17322a;
+  --muted: #5c7065;
+  --line: #d5ddce;
+  --head: #123d30;
+  --head-ink: #f1ead2;
+  --primary: #123d30;
+  --primary-ink: #f1ead2;
+  --accent: #a8792d;
+  --accent-ink: #fffaf0;
+  --accent-strong: #855f20;
+  --hl: #efe6cc;
+  --danger: #a63b2a;
+  --radius: 10px;
+  --display: var(--font-young-serif), Georgia, serif;
+  --display-weight: 400;
+  /* Young Serif only has old-style figures, so scores use lining Figtree. */
+  --num: var(--font-figtree), system-ui, sans-serif;
+  --num-weight: 800;
+
+  --owl-body: #c9a25a;
+  --owl-belly: #a07a36;
+  --owl-eye: #fbfcf8;
+  --owl-pupil: #123d30;
+  --owl-beak: #f1ead2;
+
+  --p1: #1f6b4f;
+  --p2: #a8792d;
+  --p3: #7a4e2d;
+  --p4: #4d6e8f;
+  --avatar-ink: #ffffff;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c1322;
+    --surface: #141e34;
+    --ink: #e8ecf5;
+    --muted: #8f9bb6;
+    --line: #233050;
+    --head: #0c1322;
+    --head-ink: #e8ecf5;
+    --primary: #f4b63f;
+    --primary-ink: #1d1505;
+    --accent: #f4b63f;
+    --accent-ink: #1d1505;
+    --accent-strong: #f4b63f;
+    --hl: #1c2946;
+    --danger: #ff8a7a;
+    --radius: 14px;
+    --display: var(--font-bricolage), system-ui, sans-serif;
+    --display-weight: 800;
+    --num: var(--font-bricolage), system-ui, sans-serif;
+
+    --owl-body: #7d8fbf;
+    --owl-belly: #5b6c99;
+    --owl-eye: #f4f6fb;
+    --owl-pupil: #0c1322;
+    --owl-beak: #f4b63f;
+
+    --p1: #e9a21f;
+    --p2: #2fae74;
+    --p3: #5b82e0;
+    --p4: #d9607c;
+    --avatar-ink: #0c1322;
+
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-head: var(--head);
+  --color-head-ink: var(--head-ink);
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-strong: var(--accent-strong);
+  --color-hl: var(--hl);
+  --color-danger: var(--danger);
+  --radius-card: var(--radius);
+  --font-sans: var(--font-figtree), system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+}
+
+@utility display {
+  font-family: var(--display);
+  font-weight: var(--display-weight);
+}
+
+/* Big numbers: strokes, pars, points. */
+@utility display-num {
+  font-family: var(--num);
+  font-weight: var(--num-weight);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Side padding that also clears the notch in landscape. */
+@utility gutter {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+/* Golf-ball dimples, for the big home header. */
+@utility dimples {
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--head-ink) 9%, transparent) 1.3px,
+    transparent 1.7px
+  );
+  background-size: 14px 14px;
+}
+
+@layer base {
+  html {
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Paper-scorecard notation: birdie circled, bogey boxed, doubled beyond. */
+@layer components {
+  .score-mark {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    border: 1.5px solid transparent;
+  }
+
+  .score-mark[data-mark="birdie"],
+  .score-mark[data-mark="eagle"] {
+    border-color: currentColor;
+    border-radius: 9999px;
+  }
+
+  .score-mark[data-mark="bogey"],
+  .score-mark[data-mark="double"] {
+    border-color: currentColor;
+    border-radius: 3px;
+  }
+
+  .score-mark[data-mark="eagle"],
+  .score-mark[data-mark="double"] {
+    box-shadow:
+      0 0 0 2px var(--surface),
+      0 0 0 3.5px currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
