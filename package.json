@@ -1,6 +1,6 @@
 {
 	"name": "la-chouette",
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"description": "Mobile scorecard (PWA) for La Chouette, a golf game for 3 or 4 players",
 	"private": true,
 	"license": "MIT",

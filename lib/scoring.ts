@@ -49,19 +49,19 @@ export function completedHoles(game: Game) {
  * from everyone, plus their rank (tied players share a rank).
  */
 export function standings(game: Game) {
-  const raw = game.players.map(() => 0);
+  const absolutePoints = game.players.map(() => 0);
 
   game.strokes.forEach((strokes, hole) => {
     const points = isHoleComplete(game, hole) ? holePoints(strokes) : null;
 
-    points?.forEach((p, player) => (raw[player] += p));
+    points?.forEach((p, player) => (absolutePoints[player] += p));
   });
 
-  const lowest = Math.min(...raw);
-  const points = raw.map((p) => p - lowest);
-  const ranks = points.map((p) => 1 + points.filter((o) => o > p).length);
+  const lowest = Math.min(...absolutePoints);
+  const relativePoints = absolutePoints.map((p) => p - lowest);
+  const ranks = relativePoints.map((p) => 1 + relativePoints.filter((o) => o > p).length);
 
-  return { points, ranks };
+  return { absolutePoints, relativePoints, ranks };
 }
 
 export function rankLabel(rank: number) {

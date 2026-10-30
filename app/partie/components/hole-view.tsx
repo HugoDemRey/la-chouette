@@ -38,7 +38,7 @@ export function HoleView({ game, update, onShowCard }: HoleViewProps) {
   const hole = game.currentHole;
   const par = game.pars[hole];
   const strokes = game.strokes[hole];
-  const { points, ranks } = standings(game);
+  const { absolutePoints, relativePoints, ranks } = standings(game);
   const pointsThisHole = isHoleComplete(game, hole)
     ? holePoints(strokes)
     : null;
@@ -173,7 +173,7 @@ export function HoleView({ game, update, onShowCard }: HoleViewProps) {
                   <span className="text-ink font-bold">
                     {rankLabel(ranks[player])}
                   </span>
-                  <span>{points[player]} pts</span>
+                  <span>{absolutePoints[player]} pts</span>
                   {pointsThisHole && (
                     <span className="bg-accent text-accent-ink rounded px-1 font-bold">
                       +{pointsThisHole[player]}

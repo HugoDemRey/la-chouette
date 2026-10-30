@@ -4,7 +4,7 @@ import type { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
-import { fontGrotesque, fontSans, fontSerif } from "@/config/fonts";
+import { fontSans, fontSerif } from "@/config/fonts";
 import { ServiceWorker } from "@/components/service-worker";
 
 export const metadata: Metadata = {
@@ -43,17 +43,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const forcedTheme =
+    siteConfig.devMode && siteConfig.devForceColorMode !== "none"
+      ? siteConfig.devForceColorMode
+      : undefined;
+
   return (
     <html
-      className={clsx(
-        fontSans.variable,
-        fontSerif.variable,
-        fontGrotesque.variable,
-      )}
+      className={clsx(fontSans.variable, fontSerif.variable)}
+      data-theme={forcedTheme}
       lang="fr"
     >
       <body className="bg-bg text-ink min-h-dvh font-sans antialiased">
         {children}
+        {siteConfig.devMode && (
+          <span className="bg-danger pointer-events-none fixed top-[calc(env(safe-area-inset-top)+4px)] left-1/2 z-[60] -translate-x-1/2 rounded-full px-2 py-0.5 text-[10px] font-extrabold tracking-[0.12em] text-bg shadow">
+            DEV
+          </span>
+        )}
         <ServiceWorker />
       </body>
     </html>

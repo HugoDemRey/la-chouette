@@ -3,7 +3,7 @@
 /*
  * Two moods, picked by the phone's own setting:
  * light = "Club-house" (fairway green, scorecard paper, brass),
- * dark = "Nocturne" (midnight navy, owl-eye amber).
+ * dark = the same club-house at night (forest green, cream, brass).
  */
 :root {
   --bg: #eef1e8;
@@ -42,38 +42,47 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0c1322;
-    --surface: #141e34;
-    --ink: #e8ecf5;
-    --muted: #8f9bb6;
-    --line: #233050;
-    --head: #0c1322;
-    --head-ink: #e8ecf5;
-    --primary: #f4b63f;
-    --primary-ink: #1d1505;
-    --accent: #f4b63f;
-    --accent-ink: #1d1505;
-    --accent-strong: #f4b63f;
-    --hl: #1c2946;
-    --danger: #ff8a7a;
-    --radius: 14px;
-    --display: var(--font-bricolage), system-ui, sans-serif;
-    --display-weight: 800;
-    --num: var(--font-bricolage), system-ui, sans-serif;
+/* Follows the phone, unless devForceColorMode sets data-theme on <html>. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:not([data-theme="light"]) {
+      @slot;
+    }
+  }
 
-    --owl-body: #7d8fbf;
-    --owl-belly: #5b6c99;
-    --owl-eye: #f4f6fb;
-    --owl-pupil: #0c1322;
-    --owl-beak: #f4b63f;
+  &[data-theme="dark"] {
+    @slot;
+  }
+}
 
-    --p1: #e9a21f;
-    --p2: #2fae74;
-    --p3: #5b82e0;
-    --p4: #d9607c;
-    --avatar-ink: #0c1322;
+:root {
+  @variant dark {
+    --bg: #0b1913;
+    --surface: #12251d;
+    --ink: #ece6d0;
+    --muted: #94a698;
+    --line: #20392e;
+    --head: #0f2b21;
+    --head-ink: #f1ead2;
+    --primary: #2e6e53;
+    --primary-ink: #f1ead2;
+    --accent: #c9a25a;
+    --accent-ink: #10251c;
+    --accent-strong: #d9b56e;
+    --hl: #263424;
+    --danger: #e98a76;
+
+    --owl-body: #c9a25a;
+    --owl-belly: #a07a36;
+    --owl-eye: #f4f1e6;
+    --owl-pupil: #0f2b21;
+    --owl-beak: #f1ead2;
+
+    --p1: #4fa57f;
+    --p2: #d2a24c;
+    --p3: #c98458;
+    --p4: #7ea3c9;
+    --avatar-ink: #0b1913;
 
     color-scheme: dark;
   }
@@ -183,6 +192,41 @@
     box-shadow:
       0 0 0 2px var(--surface),
       0 0 0 3.5px currentColor;
+  }
+}
+
+/* Winner reveal. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/* The owl leans in, eyes on the card, while the winner is computed. */
+@keyframes suspense {
+  0%,
+  100% {
+    transform: rotate(0) scale(1);
+  }
+  25% {
+    transform: rotate(-6deg) scale(1.04);
+  }
+  75% {
+    transform: rotate(6deg) scale(1.04);
   }
 }
 
