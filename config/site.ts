@@ -10,11 +10,13 @@ export const siteConfig = {
    * Shows a DEV badge while on: set it back to false before releasing.
    */
   devMode: false,
+  /** Ignores the phone's setting and forces one theme. */
+  devForceColorMode: "none" as "none" | "dark" | "light",
   /** Replays the winner reveal on every "Voir la carte", finished or not. */
-  devForceWinnerAnimation: true,
+  devForceWinnerAnimation: false,
   /** Header color of each theme, used for the phone's status bar. */
   themeColors: {
     light: "#123d30",
-    dark: "#0c1322",
+    dark: "#0f2b21",
   },
 };

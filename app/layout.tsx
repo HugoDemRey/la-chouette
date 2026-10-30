@@ -4,7 +4,7 @@ import type { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
-import { fontGrotesque, fontSans, fontSerif } from "@/config/fonts";
+import { fontSans, fontSerif } from "@/config/fonts";
 import { ServiceWorker } from "@/components/service-worker";
 
 export const metadata: Metadata = {
@@ -43,13 +43,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const forcedTheme =
+    siteConfig.devMode && siteConfig.devForceColorMode !== "none"
+      ? siteConfig.devForceColorMode
+      : undefined;
+
   return (
     <html
-      className={clsx(
-        fontSans.variable,
-        fontSerif.variable,
-        fontGrotesque.variable,
-      )}
+      className={clsx(fontSans.variable, fontSerif.variable)}
+      data-theme={forcedTheme}
       lang="fr"
     >
       <body className="bg-bg text-ink min-h-dvh font-sans antialiased">
