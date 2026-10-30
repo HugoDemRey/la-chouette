@@ -54,6 +54,11 @@ export default function RootLayout({
     >
       <body className="bg-bg text-ink min-h-dvh font-sans antialiased">
         {children}
+        {siteConfig.devMode && (
+          <span className="bg-danger pointer-events-none fixed top-[calc(env(safe-area-inset-top)+4px)] left-1/2 z-[60] -translate-x-1/2 rounded-full px-2 py-0.5 text-[10px] font-extrabold tracking-[0.12em] text-bg shadow">
+            DEV
+          </span>
+        )}
         <ServiceWorker />
       </body>
     </html>

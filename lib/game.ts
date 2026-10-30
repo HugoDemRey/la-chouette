@@ -10,6 +10,8 @@ export interface Game {
   currentHole: number;
   /** ISO date; missing on games saved before version 2. */
   startedAt?: string;
+  /** Set once the winner reveal has played, so it never plays twice. */
+  celebrated?: boolean;
 }
 
 const STORAGE_KEY = "la-chouette:partie";
