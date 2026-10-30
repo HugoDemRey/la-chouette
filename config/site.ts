@@ -1,10 +1,12 @@
+import packageJson from "@/package.json";
+
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "La Chouette",
   description: "Le jeu de golf à 3 ou 4 joueurs",
-  /** From package.json, injected at build time by next.config.js. */
-  version: process.env.NEXT_PUBLIC_APP_VERSION ?? "dev",
+  /** package.json is the single source of the app version (see CHANGELOG.md). */
+  version: packageJson.version,
   /**
    * Turns on the dev* shortcuts below, which are ignored while it is off.
    * Shows a DEV badge while on: set it back to false before releasing.
