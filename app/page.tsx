@@ -199,7 +199,7 @@ export default function Home() {
 }
 
 function ResumeCard({ game }: { game: Game }) {
-  const { points, ranks } = standings(game);
+  const { absolutePoints, relativePoints, ranks } = standings(game);
   const played = completedHoles(game);
   const leaders = game.players.filter((_, i) => ranks[i] === 1);
 
@@ -232,7 +232,7 @@ function ResumeCard({ game }: { game: Game }) {
         {played === 0
           ? game.players.join(", ")
           : leaders.length === 1
-            ? `${leaders[0]} mène avec ${points[game.players.indexOf(leaders[0])]} pts.`
+            ? `${leaders[0]} mène avec ${absolutePoints[game.players.indexOf(leaders[0])]} pts.`
             : `${leaders.join(" et ")} sont à égalité en tête.`}
       </p>
       <Link

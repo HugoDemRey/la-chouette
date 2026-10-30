@@ -28,7 +28,7 @@ export function CardView({
   onSelectHole: (hole: number) => void;
 }) {
   const [half, setHalf] = useState(game.currentHole < NINE ? 0 : 1);
-  const { points, ranks } = standings(game);
+  const { absolutePoints, relativePoints, ranks } = standings(game);
   const played = completedHoles(game);
   const isFinished = played === game.holeCount;
   const holes = Array.from(
@@ -60,7 +60,7 @@ export function CardView({
           TAB_BAR_SPACE,
         )}
       >
-        {isFinished && <Winner game={game} points={points} ranks={ranks} />}
+        {isFinished && <Winner game={game} points={absolutePoints} ranks={ranks} />}
 
         {game.holeCount === 18 && (
           <div
@@ -174,7 +174,7 @@ export function CardView({
             <span className="text-muted col-span-2 pl-2 text-[10px] font-bold tracking-[0.04em] uppercase">
               Points
             </span>
-            {points.map((p, i) => (
+            {absolutePoints.map((p, i) => (
               <span
                 key={i}
                 className={clsx(

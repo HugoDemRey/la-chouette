@@ -84,17 +84,6 @@ export default function RulesPage() {
           <CaseTable cases={CASES_4} />
         </Section>
 
-        <Section title="Simplification du score">
-          <p>
-            Pour garder des scores lisibles jusqu’au 18<sup>e</sup> trou, on
-            retire à chacun le total du dernier. Le dernier est donc toujours à
-            0.
-          </p>
-          <p className="bg-surface border-line rounded-card border px-4 py-3 font-semibold tabular-nums">
-            12 · 8 · 4 → 8 · 4 · 0
-          </p>
-        </Section>
-
         <Section title="Pendant la partie">
           <p>
             Le par n’est pas connu à l’avance : choisissez-le en arrivant sur

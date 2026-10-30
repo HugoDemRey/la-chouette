@@ -193,7 +193,7 @@ function drawHeader(ctx: Ctx, t: Theme, game: Game) {
 }
 
 function drawStandings(ctx: Ctx, t: Theme, game: Game, top: number) {
-  const { points, ranks } = standings(game);
+  const { absolutePoints, relativePoints, ranks } = standings(game);
   const played = completedHoles(game);
   const isFinished = played === game.holeCount;
   const winners = game.players.filter((_, i) => ranks[i] === 1);
@@ -211,7 +211,7 @@ function drawStandings(ctx: Ctx, t: Theme, game: Game, top: number) {
       : !isFinished
         ? `Classement provisoire après ${played} trou${played > 1 ? "s" : ""}`
         : winners.length === 1
-          ? `Victoire de ${winners[0]} avec ${points[game.players.indexOf(winners[0])]} points`
+          ? `Victoire de ${winners[0]} avec ${absolutePoints[game.players.indexOf(winners[0])]} points`
           : `Égalité en tête : ${winners.join(" et ")}`;
 
   text(ctx, summary, WIDTH - PAD, top + 70, {
@@ -251,7 +251,7 @@ function drawStandings(ctx: Ctx, t: Theme, game: Game, top: number) {
       font: font(t.sans, 500, 24),
       color: t.muted,
     });
-    text(ctx, String(points[player]), WIDTH - PAD - 96, cy + 18, {
+    text(ctx, String(absolutePoints[player]), WIDTH - PAD - 96, cy + 18, {
       font: font(t.num, t.numWeight, 56),
       color: leader ? t.accentStrong : t.ink,
       align: "right",
